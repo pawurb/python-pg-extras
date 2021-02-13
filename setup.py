@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pg-extras",
-    version="0.1.3",
+    version="0.1.4",
     author="Pawel Urbanek",
     author_email="contact@pawelurbanek.com",
     description="Python PostgreSQL database performance insights. Locks, index usage, buffer cache hit ratios, vacuum stats and more.",
