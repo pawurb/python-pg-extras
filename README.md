@@ -97,6 +97,8 @@ PGExtras.query('cache_hit')
 
 This command provides information on the efficiency of the buffer cache, for both index reads (`index hit rate`) as well as table reads (`table hit rate`). A low buffer cache hit ratio can be a sign that the Postgres instance is too small for the workload.
 
+[More info](https://pawelurbanek.com/postgresql-fix-performance#cache-hit)
+
 ### `index_cache_hit`
 
 ```python
@@ -113,6 +115,8 @@ PGExtras.query('index_cache_hit')
 
 The same as `cache_hit` with each table's indexes cache hit info displayed separately.
 
+[More info](https://pawelurbanek.com/postgresql-fix-performance#cache-hit)
+
 ### `table_cache_hit`
 
 ```python
@@ -128,6 +132,8 @@ PGExtras.query('table_cache_hit')
 ```
 
 The same as `cache_hit` with each table's cache hit info displayed seperately.
+
+[More info](https://pawelurbanek.com/postgresql-fix-performance#cache-hit)
 
 ### `index_usage`
 
@@ -166,6 +172,8 @@ PGExtras.query('locks')
 
 This command displays queries that have taken out an exclusive lock on a relation. Exclusive locks typically prevent other operations on that relation from taking place, and can be a cause of "hung" queries that are waiting for a lock to be granted.
 
+[More info](https://pawelurbanek.com/postgresql-fix-performance#deadlocks)
+
 ### `all_locks`
 
 ```python
@@ -198,6 +206,8 @@ This command displays statements, obtained from `pg_stat_statements`, ordered by
 
 Typically, an efficient query will have an appropriate ratio of calls to total execution time, with as little time spent on I/O as possible. Queries that have a high total execution time but low call count should be investigated to improve their performance. Queries that have a high proportion of execution time being spent on synchronous I/O should also be investigated.
 
+[More info](https://pawelurbanek.com/postgresql-fix-performance#missing-indexes)
+
 ### `calls`
 
 ```python
@@ -218,6 +228,8 @@ PGExtras.query('calls')
 
 This command is much like `pg:outliers`, but ordered by the number of times a statement has been called.
 
+[More info](https://pawelurbanek.com/postgresql-fix-performance#missing-indexes)
+
 ### `blocking`
 
 ```python
@@ -231,6 +243,8 @@ PGExtras.query('blocking')
 ```
 
 This command displays statements that are currently holding locks that other statements are waiting to be released. This can be used in conjunction with `pg:locks` to determine which statements need to be terminated in order to resolve lock contention.
+
+[More info](https://pawelurbanek.com/postgresql-fix-performance#deadlocks)
 
 ### `total_index_size`
 
@@ -339,6 +353,8 @@ PGExtras.query('unused_indexes')
 
 This command displays indexes that have < 50 scans recorded against them, and are greater than 5 pages in size, ordered by size relative to the number of index scans. This command is generally useful for eliminating indexes that are unused, which can impact write performance, as well as read performance should they occupy space in memory.
 
+[More info](https://pawelurbanek.com/postgresql-fix-performance#unused-indexes)
+
 ### `null_indexes`
 
 ```python
@@ -354,6 +370,8 @@ PGExtras.query('null_indexes')
 ```
 
 This command displays indexes that contain `NULL` values. A high ratio of `NULL` values means that using a partial index excluding them will be beneficial in case they are not used for searching.
+
+[More info](https://pawelurbanek.com/postgresql-fix-performance#null-indexes)
 
 ### `seq_scans`
 
@@ -376,6 +394,8 @@ PGExtras.query('seq_scans')
 ```
 
 This command displays the number of sequential scans recorded against all tables, descending by count of sequential scans. Tables that have very high numbers of sequential scans may be under-indexed, and it may be worth investigating queries that read from these tables.
+
+[More info](https://pawelurbanek.com/postgresql-fix-performance#missing-indexes)
 
 ### `long_running_queries`
 
@@ -431,6 +451,8 @@ PGExtras.query('bloat')
 ```
 
 This command displays an estimation of table "bloat" – space allocated to a relation that is full of dead tuples, that has yet to be reclaimed. Tables that have a high bloat ratio, typically 10 or greater, should be investigated to see if vacuuming is aggressive enough, and can be a sign of high table churn.
+
+[More info](https://pawelurbanek.com/postgresql-fix-performance#bloat)
 
 ### `vacuum_stats`
 
