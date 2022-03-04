@@ -1,2 +1,2 @@
 # add pg_extras and sql commands
-graft pg_extras
+recursive-include pg_extras *
