@@ -29,8 +29,9 @@ Some of the queries (e.g., `calls` and `outliers`) require [pg_stat_statements](
 You can check if it is enabled in your database by running:
 
 ```python
-PGExtras.query('extensions')
+pg-extras extensions
 ```
+
 You should see the similar line in the output:
 
 ```bash
@@ -39,25 +40,24 @@ You should see the similar line in the output:
 
 ## Usage
 
-Gem expects the `os.environ['DATABASE_URL']` value in the following format:
+Please edit the config in your home directory, the file name is .pg-extras.yml
 
-```python
-"postgresql://postgres:secret@localhost:5432/database_name"
+```yaml
+prod:
+  db:
+    server: 127.0.0.1
+    port: 5432
+    db: prod_db_name
+    user: prod_db_user
+    password: prod_db_pass
 ```
 
-Alternatively you can pass it directly to the method:
+You can run queries using just running
 
 ```python
-PGExtras.query('cache_hit', database_url="postgresql://postgres:secret@localhost:5432/database_name")
+pg-extras cache_hit
 ```
 
-You can run queries using a simple python API:
-
-```python
-from pg_extras import PGExtras
-
-PGExtras.query('cache_hit')
-```
 ```bash
 +----------------+------------------------+
 |        Index and table hit rate         |
@@ -69,24 +69,19 @@ PGExtras.query('cache_hit')
 +----------------+------------------------+
 ```
 
-By default the ASCII table is displayed. Alternatively you can return the raw query object:
+By default the ASCII table is displayed. Alternatively you can get full excel report with:
 
-```python
-result = PGExtras.query('cache_hit', output='raw')
-
-type(result) # => <class 'sqlalchemy.engine.result.ResultProxy'>
-result.keys() # => ['name', 'ratio']
-result.fetchall() # => [('index hit rate', Decimal('0.939...')), ('table hit rate', Decimal('0.986...'))]
-
+```bash
+pg-extrass full_report
 ```
 
 ## Available methods
 
 ### `cache_hit`
 
-```python
+```bash
 
-PGExtras.query('cache_hit')
+pg-extras cache_hit
 
       name      |         ratio
 ----------------+------------------------
@@ -101,9 +96,9 @@ This command provides information on the efficiency of the buffer cache, for bot
 
 ### `index_cache_hit`
 
-```python
+```bash
 
-PGExtras.query('index_cache_hit')
+pg-extras index_cache_hit
 
 | name                  | buffer_hits | block_reads | total_read | ratio             |
 +-----------------------+-------------+-------------+------------+-------------------+
@@ -119,9 +114,9 @@ The same as `cache_hit` with each table's indexes cache hit info displayed separ
 
 ### `table_cache_hit`
 
-```python
+```bash
 
-PGExtras.query('table_cache_hit')
+pg-extras table_cache_hit
 
 | name                  | buffer_hits | block_reads | total_read | ratio             |
 +-----------------------+-------------+-------------+------------+-------------------+
@@ -137,9 +132,9 @@ The same as `cache_hit` with each table's cache hit info displayed seperately.
 
 ### `index_usage`
 
-```python
+```bash
 
-PGExtras.query('index_usage')
+pg-extras index_usage
 
        relname       | percent_of_times_index_used | rows_in_table
 ---------------------+-----------------------------+---------------
@@ -155,9 +150,9 @@ This command provides information on the efficiency of indexes, represented as w
 
 ### `locks`
 
-```python
+```bash
 
-PGExtras.query('locks')
+pg-extras locks
 
  procpid | relname | transactionid | granted |     query_snippet     | mode             |       age
 ---------+---------+---------------+---------+-----------------------+-------------------------------------
@@ -176,9 +171,9 @@ This command displays queries that have taken out an exclusive lock on a relatio
 
 ### `all_locks`
 
-```python
+```bash
 
-PGExtras.query('all_locks')
+pg-extras all_locks
 
 ```
 
@@ -188,7 +183,7 @@ This command displays all the current locks, regardless of their type.
 
 ```python
 
-PGExtras.query('outliers')
+pg-extras outliers
 
                    qry                   |    exec_time     | prop_exec_time |   ncalls    | sync_io_time
 -----------------------------------------+------------------+----------------+-------------+--------------
@@ -210,9 +205,9 @@ Typically, an efficient query will have an appropriate ratio of calls to total e
 
 ### `calls`
 
-```python
+```bash
 
-PGExtras.query('calls')
+pg-extras calls
 
                    qry                   |    exec_time     | prop_exec_time |   ncalls    | sync_io_time
 -----------------------------------------+------------------+----------------+-------------+--------------
@@ -232,9 +227,9 @@ This command is much like `pg:outliers`, but ordered by the number of times a st
 
 ### `blocking`
 
-```python
+```bash
 
-PGExtras.query('blocking')
+pg-extras blocking
 
  blocked_pid |    blocking_statement    | blocking_duration | blocking_pid |                                        blocked_statement                           | blocked_duration
 -------------+--------------------------+-------------------+--------------+------------------------------------------------------------------------------------+------------------
@@ -248,9 +243,9 @@ This command displays statements that are currently holding locks that other sta
 
 ### `total_index_size`
 
-```python
+```bash
 
-PGExtras.query('total_index_size')
+pg-extras total_index_size
 
   size
 -------
@@ -262,9 +257,9 @@ This command displays the total size of all indexes on the database, in MB. It i
 
 ### `index_size`
 
-```python
+```bash
 
-PGExtras.query('index_size')
+pg-extras index_size
 
                              name                              |  size
 ---------------------------------------------------------------+---------
@@ -285,9 +280,9 @@ This command displays the size of each each index in the database, in MB. It is 
 
 ### `table_size`
 
-```python
+```bash
 
-PGExtras.query('table_size')
+pg-extras table_size
 
                              name                              |  size
 ---------------------------------------------------------------+---------
@@ -303,9 +298,9 @@ This command displays the size of each table and materialized view in the databa
 
 ### `table_indexes_size`
 
-```python
+```bash
 
-PGExtras.query('table_indexes_size')
+pg-extras table_indexes_size
 
                              table                             | indexes_size
 ---------------------------------------------------------------+--------------
@@ -321,9 +316,9 @@ This command displays the total size of indexes for each table and materialized 
 
 ### `total_table_size`
 
-```python
+```bash
 
-PGExtras.query('total_table_size')
+pg-extras total_table_size
 
                              name                              |  size
 ---------------------------------------------------------------+---------
@@ -341,7 +336,7 @@ This command displays the total size of each table and materialized view in the 
 
 ```python
 
-PGExtras.query('unused_indexes')
+pg-extras unused_indexes
 
           table      |                       index                | index_size | index_scans
 ---------------------+--------------------------------------------+------------+-------------
@@ -357,9 +352,9 @@ This command displays indexes that have < 50 scans recorded against them, and ar
 
 ### `null_indexes`
 
-```python
+```bash
 
-PGExtras.query('null_indexes')
+pg-extras null_indexes
 
    oid   |         index      | index_size | unique | indexed_column | null_frac | expected_saving
 ---------+--------------------+------------+--------+----------------+-----------+-----------------
@@ -375,9 +370,9 @@ This command displays indexes that contain `NULL` values. A high ratio of `NULL`
 
 ### `seq_scans`
 
-```python
+```bash
 
-PGExtras.query('seq_scans')
+pg-extras seq_scans
 
 
                name                |  count
@@ -399,9 +394,9 @@ This command displays the number of sequential scans recorded against all tables
 
 ### `long_running_queries`
 
-```python
+```bash
 
-PGExtras.query('long_running_queries')
+pg-extras long_running_queries
 
 
   pid  |    duration     |                                      query
@@ -416,9 +411,9 @@ This command displays currently running queries, that have been running for long
 
 ### `records_rank`
 
-```python
+```bash
 
-PGExtras.query('records_rank')
+pg-extras records_rank
 
                name                | estimated_count
 -----------------------------------+-----------------
@@ -435,9 +430,9 @@ This command displays an estimated count of rows per table, descending by estima
 
 ### `bloat`
 
-```python
+```bash
 
-PGExtras.query('bloat')
+pg-extras bloat
 
 
  type  | schemaname |           object_name         | bloat |   waste
@@ -456,9 +451,9 @@ This command displays an estimation of table "bloat" – space allocated to a re
 
 ### `vacuum_stats`
 
-```python
+```bash
 
-PGExtras.query('vacuum_stats')
+pg-extras vacuum_stats
 
  schema |         table         | last_vacuum | last_autovacuum  |    rowcount    | dead_rowcount  | autovacuum_threshold | expect_autovacuum
 --------+-----------------------+-------------+------------------+----------------+----------------+----------------------+-------------------
@@ -474,9 +469,9 @@ This command displays statistics related to vacuum operations for each table, in
 
 ### `kill_all`
 
-```python
+```bash
 
-PGExtras.query('kill_all')
+pg-extras kill_all
 
 ```
 
@@ -486,18 +481,8 @@ This commands kills all the currently active connections to the database. It can
 
 ```python
 
-PGExtras.query('extensions')
+pg-extras extensions
 
 ```
 
 This command lists all the currently installed and available PostgreSQL extensions.
-
-### `mandelbrot`
-
-```python
-
-PGExtras.query('mandelbrot')
-
-```
-
-This command outputs the Mandelbrot set, calculated through SQL.

@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "pg-extras"
+version = "0.1.0"
+description = ""
+authors = ["Aldo Villagra <aldovillagra@gmail.com>", "Pawel Urbanek <contact@pawelurbanek.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+rich = "^12.4.4"
+fire = "^0.4.0"
+omegaconf = "^2.2.1"
+pandas = "^1.4.2"
+SQLAlchemy = "^1.4.36"
+numpy = "^1.22.4"
+psycopg2 = "^2.9.3"
+tabulate = "^0.8.9"
+Jinja2 = "^3.1.2"
+XlsxWriter = "^3.0.3"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+pg-extras = 'pg_extras.main:run'

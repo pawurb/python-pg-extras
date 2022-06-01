@@ -1,21 +1,42 @@
-from sqlalchemy.sql import text
-import pkg_resources
-from sqlalchemy import create_engine
-from tabulate import tabulate
+__version__ = '0.1.0'
+
+import fire
 import os
+from rich.console import Console
+from omegaconf import OmegaConf
+from jinja2 import Environment, PackageLoader
 
-class PGExtras:
-  def query(query_name, output="ascii", database_url=None):
-      database_url_val = database_url or os.environ['DATABASE_URL']
-      resource_path = '/'.join(('queries', query_name + '.sql'))
-      query_sql = pkg_resources.resource_string('pg_extras', resource_path)
+console = Console()
+user_home = os.path.expanduser('~')
+default_config = user_home + '/.pg-extras.yml'
+try:
+    OmegaConf.load(default_config)
+except Exception:
+    console.print(f"[white] Creating default config...")
+    conf_yaml = """
+prod:
+  db:
+    server: 127.0.0.1
+    port: 5432
+    db: prod_db_name
+    user: prod_db_user
+    password: prod_db_pass
+    """
+    conf = OmegaConf.create(conf_yaml)
+    with open(default_config, 'w') as file:
+        OmegaConf.save(config=conf, f=file)
+        file.flush()
+    console.print(
+        f"[bold yellow] Please edit in => [bold green]{default_config}")
+    console.print("[white] Enter for continue... ")
+    input()
+config = OmegaConf.load(default_config)
+file_loader = PackageLoader('pg_extras', 'templates')
+env = Environment(loader=file_loader)
+env.trim_blocks = True
+env.lstrip_blocks = True
+env.rstrip_blocks = True
 
-      db = create_engine(database_url_val, echo=True)
-      result = db.engine.execute(text(query_sql.decode('utf-8')))
-
-      if output == "ascii":
-        print(tabulate([row for row in result], headers=result.keys(), tablefmt="grid"))
-      elif output == "raw":
-        return result
-      else:
-        print("Invalid 'output' parameter")
+debug = os.getenv('DEBUG')
+log = os.getenv('LOG')
+conn = os.getenv('CONN')
